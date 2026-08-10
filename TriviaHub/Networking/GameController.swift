@@ -42,6 +42,9 @@ final class GameController: ObservableObject {
     // Reveal state
     @Published var revealCorrectIndex: Int?
     @Published var lastRoundScores: [String: Int] = [:]
+    /// Each player's response time this round in ms (time taken to answer); absent if
+    /// they didn't answer. Drives the speed pills on the reveal screen.
+    @Published var lastRoundTimesMs: [String: Int] = [:]
 
     // Final
     @Published var finalRankedScores: [Player] = []
@@ -69,6 +72,9 @@ final class GameController: ObservableObject {
 
     /// The local player's stable id (its peer display name).
     private var localID: String { multipeer?.myPeerID.displayName ?? deviceName }
+
+    /// Public accessor so views can highlight the local player's row/avatar.
+    var myPlayerID: String { localID }
 
     var isHost: Bool { role == .host }
 
@@ -214,12 +220,17 @@ final class GameController: ObservableObject {
         cancelHostTimers()
 
         var roundScores: [String: Int] = [:]
+        var roundTimes: [String: Int] = [:]
         for player in players where !player.hasLeft {
             let submission = answersThisRound[player.id]
             let correct = submission?.answerIndex == question.correctIndex
             let remaining = submission?.timeRemainingMs ?? 0
             let pts = GameConfig.points(correct: correct, timeRemainingMs: remaining)
             roundScores[player.id] = pts
+            // Response time = how much of the window was used before answering.
+            if submission != nil {
+                roundTimes[player.id] = max(0, GameConfig.answerWindowMs - remaining)
+            }
         }
         // Apply to running totals.
         for i in players.indices {
@@ -228,11 +239,13 @@ final class GameController: ObservableObject {
 
         let totals = Dictionary(uniqueKeysWithValues: players.map { ($0.id, $0.score) })
         lastRoundScores = roundScores
+        lastRoundTimesMs = roundTimes
         revealCorrectIndex = question.correctIndex
 
         multipeer?.broadcast(.revealAnswer(correctIndex: question.correctIndex,
                                            scoresThisRound: roundScores,
-                                           totalScores: totals))
+                                           totalScores: totals,
+                                           answerTimesMs: roundTimes))
         phase = .reveal
 
         // Short pause, then next question (or end).
@@ -448,10 +461,11 @@ extension GameController: MultipeerSession.Delegate {
             guard !isHost else { return }
             answeredCount = max(answeredCount, players.filter { !$0.hasLeft }.count)
 
-        case let .revealAnswer(correctIndex, roundScores, totalScores):
+        case let .revealAnswer(correctIndex, roundScores, totalScores, answerTimesMs):
             guard !isHost else { return }
             revealCorrectIndex = correctIndex
             lastRoundScores = roundScores
+            lastRoundTimesMs = answerTimesMs
             for i in players.indices {
                 if let total = totalScores[players[i].id] { players[i].score = total }
             }

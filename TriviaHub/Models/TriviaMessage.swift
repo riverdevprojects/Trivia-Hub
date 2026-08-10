@@ -38,9 +38,13 @@ enum TriviaMessage: Codable {
     case allAnswered
 
     /// Host → all: reveal the correct answer plus this round's and running totals.
+    /// `answerTimesMs` is each player's response time this round (ms taken to answer),
+    /// used for the per-player speed pills on the reveal screen; players who didn't
+    /// answer are absent from the map.
     case revealAnswer(correctIndex: Int,
                       scoresThisRound: [String: Int],
-                      totalScores: [String: Int])
+                      totalScores: [String: Int],
+                      answerTimesMs: [String: Int])
 
     /// Host → all: the match is over; final ranked scores.
     case matchEnded(finalScores: [String: Int])
