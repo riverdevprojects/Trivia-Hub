@@ -5,16 +5,27 @@ struct HomeView: View {
     @EnvironmentObject private var game: GameController
 
     var body: some View {
+        ZStack(alignment: .topTrailing) {
+            DiscoBall(size: 140)
+                .offset(x: 45, y: -45)
+                .opacity(0.9)
+
+            content
+        }
+    }
+
+    private var content: some View {
         VStack(spacing: 28) {
             Spacer()
 
             VStack(spacing: 8) {
                 Text("Trivia Hub")
-                    .font(.system(size: 44, weight: .heavy, design: .rounded))
-                    .foregroundStyle(TriviaTheme.accent)
+                    .font(.system(size: 46, weight: .heavy, design: .rounded))
+                    .foregroundStyle(.white)
+                    .shadow(color: TriviaTheme.purpleInk.opacity(0.4), radius: 6, y: 3)
                 Text("Local multiplayer party trivia")
-                    .font(.subheadline)
-                    .foregroundStyle(.white.opacity(0.7))
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(.white.opacity(0.75))
             }
 
             Spacer()
@@ -37,7 +48,7 @@ struct HomeView: View {
                     .buttonStyle(PrimaryButtonStyle())
 
                 Button("Join Game") { game.joinGame() }
-                    .buttonStyle(PrimaryButtonStyle())
+                    .buttonStyle(SecondaryButtonStyle())
             }
 
             Spacer()

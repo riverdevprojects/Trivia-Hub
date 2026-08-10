@@ -1,73 +1,70 @@
 import SwiftUI
 
-/// Screen 5: prompt (text or image) + 4 answer buttons + countdown bar + live
-/// "X/Y answered" indicator (GDD §8.5).
+/// Screen 5 — the question screen in party style: progress dots, a shrinking timer bar,
+/// the prompt (text or image), and a chunky 2×2 answer grid, plus a live "X/Y answered"
+/// row of avatars (GDD §8.5).
 ///
-/// The countdown bar is a *local* UI animation started from `questionStartDate`; the
-/// authoritative end of the round is a host message, so a laggy bar can never strand a
-/// player on this screen (GDD §3.3).
+/// The timer bar is a *local* UI animation from `questionStartDate`; the authoritative end
+/// of the round is a host message, so a laggy bar can never strand a player (GDD §3.3).
 struct QuestionView: View {
     @EnvironmentObject private var game: GameController
 
+    private var activePlayers: [Player] { game.players.filter { !$0.hasLeft } }
+
     var body: some View {
-        VStack(spacing: 20) {
-            topBar
-            countdownBar
+        VStack(spacing: 18) {
+            ProgressDots(total: game.totalQuestions, current: game.questionIndex)
+                .padding(.top, 12)
+
+            timerBar
             prompt
-            Spacer(minLength: 8)
-            answerButtons
-            answeredIndicator
+
+            Spacer(minLength: 4)
+
+            answerGrid
+            answeredRow
         }
-        .padding(24)
+        .padding(20)
     }
 
-    private var topBar: some View {
-        HStack {
-            Text("Question \(game.questionIndex + 1) of \(game.totalQuestions)")
-                .font(.subheadline.weight(.semibold))
-                .foregroundStyle(.white.opacity(0.8))
-            Spacer()
-            if let genre = game.selectedGenreName {
-                Text(genre)
-                    .font(.caption)
-                    .foregroundStyle(TriviaTheme.accent)
-            }
-        }
-    }
+    // MARK: - Timer
 
-    private var countdownBar: some View {
+    private var timerBar: some View {
         TimelineView(.animation) { timeline in
             let fraction = remainingFraction(at: timeline.date)
             GeometryReader { geo in
                 ZStack(alignment: .leading) {
-                    Capsule().fill(Color.white.opacity(0.12))
+                    Capsule().fill(Color.black.opacity(0.18))
                     Capsule()
-                        .fill(fraction > 0.3 ? TriviaTheme.accent : TriviaTheme.incorrect)
+                        .fill(fraction > 0.3 ? TriviaTheme.gold : TriviaTheme.incorrect)
                         .frame(width: max(0, geo.size.width * fraction))
                 }
             }
-            .frame(height: 10)
+            .frame(height: 12)
         }
     }
+
+    // MARK: - Prompt
 
     @ViewBuilder
     private var prompt: some View {
         if let payload = game.currentPayload {
-            VStack(spacing: 16) {
+            VStack(spacing: 14) {
                 if let imageName = payload.promptImageName {
                     Image(imageName)
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .frame(maxWidth: .infinity)
-                        .frame(height: 200)
-                        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                        .frame(height: 190)
+                        .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
                         .overlay(
-                            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                                .stroke(TriviaTheme.cardStroke, lineWidth: 1)
+                            RoundedRectangle(cornerRadius: 22, style: .continuous)
+                                .stroke(Color.white.opacity(0.3), lineWidth: 1)
                         )
+                        .shadow(color: .black.opacity(0.2), radius: 10, y: 6)
                 }
                 Text(payload.promptText)
-                    .font(.title3.weight(.semibold))
+                    .font(.system(size: 22, weight: .bold, design: .rounded))
                     .multilineTextAlignment(.center)
                     .foregroundStyle(.white)
                     .fixedSize(horizontal: false, vertical: true)
@@ -75,52 +72,48 @@ struct QuestionView: View {
         }
     }
 
-    private var answerButtons: some View {
-        VStack(spacing: 12) {
+    // MARK: - Answers
+
+    private var answerGrid: some View {
+        Group {
             if let payload = game.currentPayload {
-                ForEach(Array(payload.options.enumerated()), id: \.offset) { index, option in
-                    Button {
-                        game.submitAnswer(index)
-                    } label: {
-                        HStack {
-                            Text(option)
-                                .foregroundStyle(.white)
-                                .multilineTextAlignment(.leading)
-                            Spacer()
-                        }
-                        .padding(16)
-                        .frame(maxWidth: .infinity)
-                        .background(background(for: index))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                                .stroke(game.localAnswerIndex == index ? TriviaTheme.accent : TriviaTheme.cardStroke,
-                                        lineWidth: game.localAnswerIndex == index ? 2 : 1)
+                LazyVGrid(columns: [GridItem(.flexible(), spacing: 14),
+                                    GridItem(.flexible(), spacing: 14)],
+                          spacing: 14) {
+                    ForEach(Array(payload.options.enumerated()), id: \.offset) { index, option in
+                        AnswerCell(
+                            text: option,
+                            state: game.localAnswerIndex == index ? .selected : .idle,
+                            action: { game.submitAnswer(index) },
+                            disabled: game.localAnswerIndex != nil
                         )
-                        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                        .frame(height: 96)
                     }
-                    .disabled(game.localAnswerIndex != nil)
                 }
             }
         }
     }
 
-    private func background(for index: Int) -> Color {
-        game.localAnswerIndex == index ? TriviaTheme.accent.opacity(0.25) : TriviaTheme.card
-    }
+    // MARK: - Answered indicator
 
-    private var answeredIndicator: some View {
-        HStack(spacing: 6) {
-            Image(systemName: "person.2.fill")
-                .foregroundStyle(.white.opacity(0.6))
-            Text("\(game.answeredCount)/\(game.players.filter { !$0.hasLeft }.count) answered")
-                .font(.caption)
-                .foregroundStyle(.white.opacity(0.7))
+    private var answeredRow: some View {
+        HStack(spacing: 8) {
+            HStack(spacing: -10) {
+                ForEach(activePlayers.prefix(8)) { player in
+                    PlayerAvatar(player: player, size: 28,
+                                 highlighted: player.id == game.myPlayerID)
+                }
+            }
+            Text("\(game.answeredCount)/\(activePlayers.count) answered")
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(.white.opacity(0.8))
             if game.localAnswerIndex != nil {
-                Text("• Waiting for others…")
-                    .font(.caption)
-                    .foregroundStyle(TriviaTheme.accent)
+                Text("• Locked in!")
+                    .font(.caption.weight(.bold))
+                    .foregroundStyle(TriviaTheme.gold)
             }
         }
+        .padding(.top, 2)
     }
 
     private func remainingFraction(at date: Date) -> Double {

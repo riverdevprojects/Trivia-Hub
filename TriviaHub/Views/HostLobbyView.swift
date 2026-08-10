@@ -66,10 +66,12 @@ struct HostLobbyView: View {
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(.white)
                 ForEach(game.players) { player in
-                    HStack {
-                        Image(systemName: player.id == game.players.first?.id ? "crown.fill" : "person.fill")
-                            .foregroundStyle(TriviaTheme.accent)
+                    HStack(spacing: 12) {
+                        PlayerAvatar(player: player, size: 40,
+                                     showCrown: player.id == game.players.first?.id,
+                                     highlighted: player.id == game.myPlayerID)
                         Text(player.name)
+                            .font(.headline)
                             .foregroundStyle(.white)
                             .strikethrough(player.hasLeft)
                         if player.hasLeft {

@@ -5,9 +5,7 @@ import SwiftUI
 struct FinalLeaderboardView: View {
     @EnvironmentObject private var game: GameController
 
-    private var localID: String {
-        game.players.first { $0.name == game.deviceName }?.id ?? ""
-    }
+    private var localID: String { game.myPlayerID }
 
     var body: some View {
         VStack(spacing: 20) {
@@ -49,11 +47,14 @@ struct FinalLeaderboardView: View {
             ZStack {
                 Circle()
                     .fill(medalColor(rank).opacity(0.25))
-                    .frame(width: 40, height: 40)
+                    .frame(width: 34, height: 34)
                 Text("\(rank + 1)")
                     .font(.headline)
                     .foregroundStyle(medalColor(rank))
             }
+            PlayerAvatar(player: player, size: 44,
+                         showCrown: rank == 0,
+                         highlighted: player.id == localID)
             VStack(alignment: .leading, spacing: 2) {
                 Text(player.name)
                     .font(.headline)
