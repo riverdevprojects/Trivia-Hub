@@ -1,0 +1,48 @@
+{
+  "id": "screensavers",
+  "displayName": "Screensaver Trivia",
+  "questions": [
+    {
+      "id": "ss_01",
+      "promptText": "Where is this?",
+      "promptImageName": "screensaver_sample_1",
+      "options": ["Yosemite", "Yellowstone", "Banff", "Glacier National Park"],
+      "correctIndex": 0
+    },
+    {
+      "id": "ss_02",
+      "promptText": "Where is this?",
+      "promptImageName": "screensaver_sample_2",
+      "options": ["Sahara Desert", "Grand Canyon", "Monument Valley", "Bryce Canyon"],
+      "correctIndex": 2
+    },
+    {
+      "id": "ss_03",
+      "promptText": "Where is this?",
+      "promptImageName": "screensaver_sample_3",
+      "options": ["Swiss Alps", "Rocky Mountains", "Patagonia", "Himalayas"],
+      "correctIndex": 0
+    },
+    {
+      "id": "ss_04",
+      "promptText": "Where is this?",
+      "promptImageName": "screensaver_sample_1",
+      "options": ["Lake Tahoe", "Crater Lake", "Lake Louise", "Loch Ness"],
+      "correctIndex": 2
+    },
+    {
+      "id": "ss_05",
+      "promptText": "Where is this?",
+      "promptImageName": "screensaver_sample_2",
+      "options": ["Iceland", "New Zealand", "Norway", "Scotland"],
+      "correctIndex": 0
+    },
+    {
+      "id": "ss_06",
+      "promptText": "Where is this?",
+      "promptImageName": "screensaver_sample_3",
+      "options": ["Amazon Rainforest", "Redwood Forest", "Black Forest", "Daintree Rainforest"],
+      "correctIndex": 1
+    }
+  ]
+}

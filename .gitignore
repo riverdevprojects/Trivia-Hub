@@ -1,0 +1,25 @@
+# Xcode
+build/
+DerivedData/
+*.xcworkspace/xcuserdata/
+xcuserdata/
+*.xcuserstate
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# macOS
+.DS_Store
+
+# Fastlane / CocoaPods (unused today, ignored preemptively)
+Pods/
+fastlane/report.xml
+
+# Claude Code local session settings
+.claude/

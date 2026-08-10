@@ -1,0 +1,90 @@
+{
+  "id": "movie_quotes",
+  "displayName": "Movie Quote Trivia",
+  "questions": [
+    {
+      "id": "mq_01",
+      "promptText": "\"Here's looking at you, kid.\" — What movie is this from?",
+      "promptImageName": null,
+      "options": ["Casablanca", "Gone with the Wind", "Citizen Kane", "The Maltese Falcon"],
+      "correctIndex": 0
+    },
+    {
+      "id": "mq_02",
+      "promptText": "\"I'm going to make him an offer he can't refuse.\" — Who says this line?",
+      "promptImageName": null,
+      "options": ["Michael Corleone", "Vito Corleone", "Tony Montana", "Sonny Corleone"],
+      "correctIndex": 1
+    },
+    {
+      "id": "mq_03",
+      "promptText": "\"May the Force be with you.\" — What movie is this from?",
+      "promptImageName": null,
+      "options": ["Star Trek", "Star Wars", "Guardians of the Galaxy", "Dune"],
+      "correctIndex": 1
+    },
+    {
+      "id": "mq_04",
+      "promptText": "\"You can't handle the truth!\" — Who says this line?",
+      "promptImageName": null,
+      "options": ["Tom Cruise", "Al Pacino", "Jack Nicholson", "Kevin Bacon"],
+      "correctIndex": 2
+    },
+    {
+      "id": "mq_05",
+      "promptText": "\"Life is like a box of chocolates.\" — What movie is this from?",
+      "promptImageName": null,
+      "options": ["Forrest Gump", "Big Fish", "The Green Mile", "Cast Away"],
+      "correctIndex": 0
+    },
+    {
+      "id": "mq_06",
+      "promptText": "\"I'll be back.\" — Who says this line?",
+      "promptImageName": null,
+      "options": ["Sylvester Stallone", "Arnold Schwarzenegger", "Bruce Willis", "Jean-Claude Van Damme"],
+      "correctIndex": 1
+    },
+    {
+      "id": "mq_07",
+      "promptText": "\"You're gonna need a bigger boat.\" — What movie is this from?",
+      "promptImageName": null,
+      "options": ["The Perfect Storm", "Titanic", "Jaws", "Moby Dick"],
+      "correctIndex": 2
+    },
+    {
+      "id": "mq_08",
+      "promptText": "\"Why so serious?\" — Who says this line?",
+      "promptImageName": null,
+      "options": ["The Riddler", "Bane", "The Joker", "Two-Face"],
+      "correctIndex": 2
+    },
+    {
+      "id": "mq_09",
+      "promptText": "\"There's no place like home.\" — What movie is this from?",
+      "promptImageName": null,
+      "options": ["The Wizard of Oz", "Alice in Wonderland", "Mary Poppins", "Peter Pan"],
+      "correctIndex": 0
+    },
+    {
+      "id": "mq_10",
+      "promptText": "\"To infinity and beyond!\" — Who says this line?",
+      "promptImageName": null,
+      "options": ["Woody", "Buzz Lightyear", "Rex", "Mr. Potato Head"],
+      "correctIndex": 1
+    },
+    {
+      "id": "mq_11",
+      "promptText": "\"Just keep swimming.\" — What movie is this from?",
+      "promptImageName": null,
+      "options": ["Shark Tale", "The Little Mermaid", "Finding Nemo", "Moana"],
+      "correctIndex": 2
+    },
+    {
+      "id": "mq_12",
+      "promptText": "\"Elementary, my dear Watson.\" — Who is the speaker?",
+      "promptImageName": null,
+      "options": ["Hercule Poirot", "Sherlock Holmes", "Sam Spade", "Philip Marlowe"],
+      "correctIndex": 1
+    }
+  ]
+}
