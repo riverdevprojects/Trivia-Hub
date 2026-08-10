@@ -10,8 +10,27 @@
 		1A2B3C000000000000000004 /* TriviaHub.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TriviaHub.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		1A2B3C000000000000000010 /* Exceptions for "TriviaHub" folder in "TriviaHub" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 1A2B3C000000000000000005 /* TriviaHub */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		1A2B3C00000000000000000F /* TriviaHub */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = TriviaHub; sourceTree = "<group>"; };
+		1A2B3C00000000000000000F /* TriviaHub */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				1A2B3C000000000000000010 /* Exceptions for "TriviaHub" folder in "TriviaHub" target */,
+			);
+			explicitFileTypes = {};
+			explicitFolders = ();
+			path = TriviaHub;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
